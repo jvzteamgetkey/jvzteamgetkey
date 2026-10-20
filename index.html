@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070812">
+  <meta name="description" content="AMAAN INFO — Demo information website. Real information website coming soon.">
+  <title>AMAAN INFO | Premium Information</title>
+  <style>
+    :root { color-scheme: dark; --cyan:#65f3ff; --purple:#9b7bff; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin:0; min-height:100vh; overflow-x:hidden; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:#f7f8ff; background:#070812; }
+    .video-bg { position:fixed; inset:0; z-index:-3; width:100%; height:100%; object-fit:cover; opacity:.82; pointer-events:none; background:#070812; }
+    .video-tint { position:fixed; inset:0; z-index:-2; pointer-events:none; background:linear-gradient(180deg,rgba(7,8,18,.28),rgba(7,8,18,.38)); }
+    .backdrop { position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none; }
+    .orb { position:absolute; width:min(60vw,620px); aspect-ratio:1; border-radius:50%; filter:blur(75px); opacity:.24; animation:float 13s ease-in-out infinite alternate; }
+    .orb.one { background:#6c48ff; top:-20%; left:-12%; } .orb.two { background:#00d9e8; right:-18%; bottom:-28%; animation-delay:-5s; }
+    .grid { position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.13; background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px); background-size:48px 48px; mask-image:linear-gradient(to bottom,black,transparent 90%); }
+    .sound-toggle { position:fixed; z-index:5; right:16px; bottom:16px; border:1px solid #ffffff40; border-radius:999px; padding:12px 16px; color:#f7f8ff; background:rgba(12,13,28,.88); backdrop-filter:blur(12px); font:inherit; font-size:13px; cursor:pointer; box-shadow:0 8px 28px #0006; }
+    .sound-toggle:hover { border-color:var(--cyan); }
+    header { width:min(1120px,calc(100% - 40px)); margin:auto; padding:26px 0; display:flex; justify-content:space-between; align-items:center; gap:16px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.12em; }
+    .brand-mark { width:38px; height:38px; display:grid; place-items:center; border-radius:13px; color:#071017; background:linear-gradient(135deg,var(--cyan),var(--purple)); box-shadow:0 0 28px #65f3ff44; }
+    .pill { border:1px solid #ffffff22; background:#ffffff08; color:#d8dcf2; border-radius:999px; padding:9px 13px; font-size:12px; letter-spacing:.1em; }
+    main { width:min(960px,calc(100% - 32px)); margin:0 auto; min-height:72vh; display:grid; place-items:center; padding:50px 0 80px; }
+    .hero { width:100%; text-align:center; padding:clamp(28px,6vw,68px) clamp(20px,5vw,56px); border:1px solid #ffffff1c; border-radius:30px; background:linear-gradient(145deg,#ffffff0c,#ffffff04); box-shadow:0 24px 90px #00000045; backdrop-filter:blur(16px); position:relative; overflow:hidden; }
+    .hero:before { content:""; position:absolute; left:15%; right:15%; top:0; height:1px; background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent); }
+    .eyebrow { display:inline-flex; align-items:center; gap:9px; color:#b9faff; border:1px solid #65f3ff38; background:#65f3ff0c; border-radius:999px; padding:9px 14px; font-size:12px; letter-spacing:.15em; text-transform:uppercase; }
+    .dot { width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 12px var(--cyan); }
+    h1 { margin:24px 0 18px; font-size:clamp(42px,9vw,88px); line-height:.98; letter-spacing:-.065em; font-weight:900; }
+    h1 span { background:linear-gradient(100deg,#fff 10%,var(--cyan) 48%,#b8a2ff 90%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .subtitle { max-width:620px; margin:0 auto; color:#b8bdd3; font-size:clamp(15px,2vw,18px); line-height:1.8; }
+    .notice { max-width:620px; margin:32px auto 0; padding:19px 20px; border-radius:17px; border:1px solid #9b7bff45; background:#9b7bff0c; color:#e9e4ff; line-height:1.7; }
+    .notice strong { color:#fff; }
+    .actions { display:flex; justify-content:center; flex-wrap:wrap; gap:12px; margin-top:28px; }
+    a.button { text-decoration:none; display:inline-flex; justify-content:center; align-items:center; gap:10px; border-radius:13px; padding:13px 19px; font-weight:750; font-size:14px; transition:transform .2s,box-shadow .2s; }
+    a.button:hover { transform:translateY(-2px); }
+    .primary { color:#071017; background:linear-gradient(100deg,var(--cyan),#b2a0ff); box-shadow:0 8px 28px #65f3ff25; }
+    .secondary { color:#f4f5ff; border:1px solid #ffffff26; background:#ffffff08; }
+    .features { width:100%; display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px; text-align:left; }
+    .feature { padding:19px; border-radius:17px; border:1px solid #ffffff15; background:#ffffff06; }
+    .feature .icon { color:var(--cyan); font-size:20px; }
+    .feature h2 { font-size:14px; margin:12px 0 7px; }
+    .feature p { margin:0; color:#aeb4cc; font-size:12px; line-height:1.65; }
+    footer { width:min(1120px,calc(100% - 40px)); margin:auto; padding:20px 0 28px; color:#858ba6; font-size:12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; border-top:1px solid #ffffff12; }
+    .profile-orbit { width:142px; height:142px; margin:0 auto 24px; border-radius:50%; padding:7px; position:relative; display:grid; place-items:center; border:1px solid #65f3ffb0; box-shadow:0 0 0 7px #9b7bff22,0 0 36px #65f3ff35; }
+    .profile-orbit:before { content:""; position:absolute; inset:-8px; border:1px dashed #c6a6ffb8; border-radius:50%; animation:spin 18s linear infinite; }
+    .avatar { width:100%; height:100%; display:grid; place-items:center; border-radius:50%; color:#071017; font-size:36px; font-weight:950; letter-spacing:-.08em; background:linear-gradient(135deg,#dffcff,#9b7bff 58%,#65f3ff); border:5px solid #ffffffc9; }
+    .social-list { display:grid; gap:12px; max-width:700px; margin:30px auto 26px; text-align:left; }
+    .social-card { display:flex; align-items:center; gap:16px; padding:16px 18px; border-radius:22px; border:1px solid #ffffff45; background:linear-gradient(110deg,#ffffff19,#ffffff08); box-shadow:inset 0 1px #ffffff18; }
+    .social-icon { flex:0 0 56px; width:56px; height:56px; display:grid; place-items:center; color:white; font-size:28px; border-radius:17px; font-weight:900; }
+    .telegram { background:#229ed9; } .youtube { background:#f00018; } .youtube span { font-size:23px; }
+    .social-card h2 { margin:0 0 5px; font-size:clamp(12px,2.5vw,16px); font-weight:850; }
+    .social-card p { margin:0; color:#c5d3ef; font-size:14px; }
+    .arrow { margin-left:auto; color:#d9faff; font-size:20px; opacity:.75; }
+    .section-label { margin:24px 0 14px; color:#e7edff; font-size:12px; letter-spacing:.25em; }
+    .info-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; text-align:left; }
+    .info-card { min-height:82px; display:flex; flex-direction:column; justify-content:center; gap:5px; padding:15px 18px; border:1px solid #ffffff42; border-radius:20px; background:linear-gradient(135deg,#ffffff18,#ffffff08); }
+    .info-card span { color:#d7dced; font-size:11px; letter-spacing:.2em; }
+    .info-card strong { color:#fff; font-size:16px; line-height:1.4; overflow-wrap:anywhere; }
+    .info-card em { font-style:normal; color:#d7dced; }
+    .signature { display:flex; align-items:center; justify-content:center; gap:13px; margin-top:26px; font-size:10px; letter-spacing:.28em; color:#d7def3; }
+    .signature span { width:28px; height:1px; background:linear-gradient(90deg,transparent,#65f3ff); }
+    .signature span:last-child { transform:rotate(180deg); }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes float { from { transform:translate3d(0,0,0) scale(1); } to { transform:translate3d(6%,8%,0) scale(1.15); } }
+    @media(max-width:650px) { header{padding:18px 0}.pill{font-size:10px}main{padding:24px 0 48px}.hero{border-radius:23px}.info-grid{grid-template-columns:1fr}.social-card{padding:13px}.social-icon{width:52px;height:52px;flex-basis:52px}footer{flex-direction:column} }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after{animation:none!important;scroll-behavior:auto!important;transition:none!important} }
+  
+    .brand-mark{font-size:12px;letter-spacing:-.08em;font-weight:950}
+    .hero{text-align:left;border-radius:28px;background:linear-gradient(145deg,rgba(15,22,47,.88),rgba(21,14,42,.74));border-color:rgba(124,240,255,.24)}
+    .hero:before{left:8%;right:8%}
+    .eyebrow{margin-bottom:8px}
+    h1{font-size:clamp(56px,12vw,102px);line-height:.83;letter-spacing:-.08em;margin:28px 0 20px}
+    h1 span{background:linear-gradient(100deg,#73f6ff,#b6a1ff 60%,#ffb7e8);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .subtitle{margin:0;max-width:540px;text-align:left}
+    .profile-banner{display:flex;align-items:center;gap:18px;margin:32px 0 30px;padding:20px;border:1px solid #8eefff30;border-radius:20px;background:linear-gradient(110deg,#65f3ff12,#a88aff12)}
+    .profile-symbol{flex:0 0 70px;width:70px;height:70px;display:grid;place-items:center;position:relative;border-radius:22px;background:linear-gradient(145deg,#70f5ff,#9c7bff);color:#080b1a;font-size:23px;font-weight:950;box-shadow:0 0 32px #65f3ff20}
+    .profile-symbol span{position:absolute;right:7px;top:5px;font-size:13px}
+    .micro-label,.label{display:block;color:#9da8c7;font-size:10px;letter-spacing:.17em;font-weight:750}
+    .profile-banner h2{margin:7px 0 5px;font-size:19px;letter-spacing:-.03em}
+    .profile-banner p,.wide-card p{margin:0;color:#aeb6d0;font-size:13px;line-height:1.6}
+    .section-heading{display:flex;align-items:center;gap:14px;margin:28px 0 14px;color:#a8b5d6;font-size:10px;font-weight:800;letter-spacing:.16em}
+    .section-heading i{height:1px;flex:1;background:linear-gradient(90deg,#65f3ff45,transparent)}
+    .info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .info-card{position:relative;min-height:126px;padding:17px;border:1px solid #ffffff1a;border-radius:17px;background:linear-gradient(140deg,#ffffff0b,#ffffff03);display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+    .info-icon{position:absolute;right:15px;top:13px;color:#65f3ff;font-size:18px}
+    .info-card strong,.wide-card strong{font-size:17px;letter-spacing:-.03em}
+    .info-card small{color:#8e99b8;font-size:11px}
+    .wide-card{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:20px;border:1px solid #ffffff1a;border-radius:18px;background:linear-gradient(100deg,#9b7bff12,#65f3ff0b)}
+    .wide-card strong{display:block;margin:8px 0}
+    .code-mark{font-size:26px;font-weight:900;color:#65f3ff;border:1px solid #65f3ff40;background:#65f3ff0d;padding:14px;border-radius:15px}
+    .quote-card{position:relative;padding:24px;border-radius:18px;border:1px solid #b49aff35;background:#9b7bff0b}
+    .quote-mark{font-size:42px;color:#a991ff;line-height:.8}
+    .quote-card p{font-size:17px;line-height:1.6;margin:8px 0 17px;font-weight:650;letter-spacing:-.02em}
+    .signature{font-size:10px;letter-spacing:.18em;color:#9da8c7}
+    .footer-note{display:flex;align-items:center;gap:9px;margin-top:25px;color:#7e8aa9;font-size:9px;letter-spacing:.12em}
+    .pulse-dot{width:6px;height:6px;background:#65f3ff;border-radius:50%;box-shadow:0 0 10px #65f3ff}
+    .footer-line{height:1px;flex:1;background:#ffffff20}
+    @media(max-width:650px){.info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-banner{padding:15px;gap:13px}.profile-symbol{width:58px;height:58px;flex-basis:58px;border-radius:18px}.profile-banner h2{font-size:16px}.info-card{padding:14px;min-height:118px}.hero{padding:28px 18px}.quote-card p{font-size:15px}}
+
+  </style>
+</head>
+<body>
+  <!-- Video uses the original site's background-video file. Sound starts only after a user taps the button. -->
+  <video class="video-bg" id="backgroundVideo" autoplay muted loop playsinline preload="metadata" aria-label="AMAAN INFO background video">
+    <source src="https://nexora-premium-information-3h73r6.v2.appdeploy.ai/resources/background-video.mp4" type="video/mp4">
+  </video>
+  <div class="video-tint" aria-hidden="true"></div>
+  <div class="backdrop" aria-hidden="true"><div class="orb one"></div><div class="orb two"></div></div>
+  <div class="grid" aria-hidden="true"></div>
+  <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">♫ Play video + song</button>
+  <header>
+    <div class="brand"><div class="brand-mark">AI</div><span>AMAAN INFO</span></div>
+    <div class="pill">PERSONAL PROFILE</div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span class="dot"></span> DIGITAL IDENTITY • ONLINE</div>
+      <h1>AMAAN<br><span>INFO</span></h1>
+      <p class="subtitle">A little corner of the internet for my info, interests and updates. Simple, bold, and different.</p>
+      <div class="profile-banner">
+        <div class="profile-symbol">AI<span>✦</span></div>
+        <div><div class="micro-label">PERSONAL SPACE</div><h2>Welcome to my world</h2><p>Scroll down to know a little more.</p></div>
+      </div>
+      <div class="section-heading"><span>01 / BASIC INFO</span><i></i></div>
+      <div class="info-grid">
+        <article class="info-card"><span class="info-icon">⌖</span><span class="label">COUNTRY</span><strong>India</strong><small>South Asia</small></article>
+        <article class="info-card"><span class="info-icon">✧</span><span class="label">STATE</span><strong>Uttar Pradesh</strong><small>India</small></article>
+        <article class="info-card"><span class="info-icon">☁</span><span class="label">VIBE</span><strong>Just chillin’</strong><small>Laid-back mode</small></article>
+        <article class="info-card"><span class="info-icon">⚡</span><span class="label">SKILLS</span><strong>Learning daily</strong><small>One step at a time</small></article>
+      </div>
+      <div class="section-heading"><span>02 / TECH CORNER</span><i></i></div>
+      <div class="wide-card"><div><span class="label">CURRENT INTEREST</span><strong>Web & Code</strong><p>HTML · CSS · Creative ideas</p></div><div class="code-mark">&lt;/&gt;</div></div>
+      <div class="section-heading"><span>03 / THAT’S ME</span><i></i></div>
+      <div class="quote-card"><span class="quote-mark">“</span><p>Not perfect. Just original. Building my own vibe, one day at a time.</p><span class="signature">— AMAAN INFO</span></div>
+      <div class="footer-note"><span class="pulse-dot"></span> PERSONAL INFO PAGE <span class="footer-line"></span> MADE WITH STYLE</div>
+    </section>
+  </main>
+  <footer><span>© <span id="year"></span> AMAAN INFO</span><span>Personal information • Premium profile</span></footer>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const video = document.getElementById('backgroundVideo');
+    const soundButton = document.getElementById('soundToggle');
+    soundButton.addEventListener('click', async () => {
+      if (video.muted) {
+        video.muted = false;
+        try {
+          await video.play();
+          soundButton.textContent = '♫ Mute song';
+          soundButton.setAttribute('aria-pressed', 'true');
+        } catch (error) {
+          video.muted = true;
+          soundButton.textContent = '♫ Tap to play video + song';
+          soundButton.setAttribute('aria-pressed', 'false');
+        }
+      } else {
+        video.muted = true;
+        soundButton.textContent = '♫ Play video + song';
+        soundButton.setAttribute('aria-pressed', 'false');
+      }
+    });
+    video.addEventListener('loadeddata', () => { video.play().catch(() => {}); }, { once: true });
+    video.play().catch(() => {
+      // Some browsers wait for a user interaction before starting media.
+      const startVideo = () => { video.play().catch(() => {}); document.removeEventListener('touchstart', startVideo); document.removeEventListener('click', startVideo); };
+      document.addEventListener('touchstart', startVideo, { once: true, passive: true });
+      document.addEventListener('click', startVideo, { once: true });
+    });
+  </script>
+</body>
+</html>
